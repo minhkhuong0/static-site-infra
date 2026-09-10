@@ -4,8 +4,8 @@ provider "aws" {
   default_tags {
     tags = {
       Environment = "dev"
-      Project     = "learn"
-      ManagedBy   = "terraform"
+      Project     = "static-site"
+      ManagedBy   = "opentofu"
     }
   }
 }
@@ -13,14 +13,14 @@ provider "aws" {
 resource "aws_vpc" "vpc" {
   cidr_block = "10.0.0.0/16"
   tags = {
-    Name = "learn-vpc"
+    Name = "static-site-vpc"
   }
 }
 
 resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.vpc.id
   tags = {
-    Name = "learn-igw"
+    Name = "static-site-igw"
   }
 }
 
@@ -30,7 +30,7 @@ resource "aws_subnet" "public_subnet" {
   availability_zone       = "${var.region}a"
   map_public_ip_on_launch = true
   tags = {
-    Name = "learn-public-subnet1a"
+    Name = "static-site-public-subnet1a"
   }
 }
 
@@ -39,7 +39,7 @@ resource "aws_subnet" "public_subnet" {
 #   cidr_block        = "10.0.2.0/24"
 #   availability_zone = "${var.region}a"
 #   tags = {
-#     Name = "learn-private-subnet1a"
+#     Name = "static-site-private-subnet1a"
 #   }
 # }
 
@@ -50,7 +50,7 @@ resource "aws_route_table" "public_route_table" {
     gateway_id = aws_internet_gateway.gw.id
   }
   tags = {
-    Name = "learn-route-table"
+    Name = "static-site-route-table"
   }
 }
 
@@ -60,7 +60,7 @@ resource "aws_route_table_association" "public_route_table_association" {
 }
 
 resource "aws_iam_role" "ec2_role" {
-  name = "learn-EC2-SSM"
+  name = "static-site-EC2-SSM"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -90,19 +90,30 @@ resource "aws_iam_instance_profile" "ec2_instance_profile" {
 resource "aws_security_group" "instance_security_group" {
   name_prefix = "instance-sg"
   vpc_id      = aws_vpc.vpc.id
-  description = "learn - security group for the EC2 instance"
+  description = "static-site - security group for the EC2 instance"
 
-  # Allow outbound HTTPS traffic
-  egress {
+  ingress {
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
-    description = "Allow HTTPS outbound traffic"
+    description = "HTTPS"
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Allow all outbound IPv4"
   }
 
   tags = {
-    Name = "learn-instance-sg"
+    Name = "static-site-instance-sg"
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 }
 
@@ -128,6 +139,6 @@ resource "aws_instance" "app_server" {
   iam_instance_profile = aws_iam_instance_profile.ec2_instance_profile.name
 
   tags = {
-    Name = "learn-terraform"
+    Name = "static-site-ec2"
   }
 }

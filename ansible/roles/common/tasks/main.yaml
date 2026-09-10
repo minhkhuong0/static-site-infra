@@ -1,0 +1,12 @@
+- name: Set timezone
+  community.general.timezone:
+    name: "{{ system_timezone }}"
+  become: true
+
+- name: Install essential admin packages
+  ansible.builtin.package:
+    name:
+      - htop
+      - curl
+    state: present
+  become: true

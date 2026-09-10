@@ -1,0 +1,11 @@
+- name: Install Docker packages
+  hosts: all
+  tasks:
+    - ansible.builtin.apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+        state: present
+        update_cache: true
+      become: true

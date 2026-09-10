@@ -1,0 +1,10 @@
+- name: Baseline cofig
+  hosts: all
+  roles:
+    - common
+
+- name: Setup Nginx container
+  hosts: aws_ec2
+  roles:
+    - docker
+#    - nginx

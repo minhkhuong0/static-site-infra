@@ -1,0 +1,15 @@
+plugin: amazon.aws.aws_ec2
+regions:
+  - eu-central-1
+
+filters:
+  instance-state-name: running
+  "tag:ManagedBy": opentofu
+  "tag:Project": static-site
+
+hostnames: instance-id
+
+keyed_groups:
+  - key: ec2_tags.Project
+    prefix: project
+  # - key: ec2_tags.Name
