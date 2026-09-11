@@ -139,6 +139,7 @@ resource "aws_instance" "app_server" {
   iam_instance_profile = aws_iam_instance_profile.ec2_instance_profile.name
 
   tags = {
-    Name = "static-site-ec2"
+    Name       = "static-site-ec2"
+    DomainName = "www.${var.domain}"
   }
 }
