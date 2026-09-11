@@ -7,4 +7,4 @@
   hosts: aws_ec2
   roles:
     - docker
-#    - nginx
+    - nginx

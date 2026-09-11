@@ -1,0 +1,42 @@
+- name: Ensure deployment dir exists
+  ansible.builtin.file:
+    path: /srv/portfolio
+    state: directory
+    owner: ssm-user
+    group: ssm-user
+    mode: '0755'
+  become: true
+
+- name: Deploy docker-compose.yaml
+  ansible.builtin.template:
+    src: docker-compose.yaml.j2
+    dest: /srv/portfolio/docker-compose.yaml
+    owner: ssm-user
+    group: ssm-user
+    mode: '0644'
+
+- name: Ensure content dir exists
+  ansible.builtin.file:
+    path: /srv/portfolio/content
+    state: directory
+    owner: ssm-user
+    group: ssm-user
+    mode: '0755'
+
+- name: (temp) deploy html
+  ansible.builtin.template:
+    src: index.html.j2
+    dest: /srv/portfolio/content/index.html
+    owner: ssm-user
+    group: ssm-user
+    mode: '0644'
+
+- name: Run docker compose up
+  community.docker.docker_compose_v2:
+    project_src: /srv/portfolio
+    state: present
+  register: nginx_output
+
+- name: Show deployment status
+  ansible.builtin.debug:
+    var: nginx_output

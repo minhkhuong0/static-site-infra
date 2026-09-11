@@ -87,6 +87,14 @@ resource "aws_security_group" "instance_security_group" {
   description = "static-site - security group for the EC2 instance"
 
   ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "HTTP"
+  }
+
+  ingress {
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"

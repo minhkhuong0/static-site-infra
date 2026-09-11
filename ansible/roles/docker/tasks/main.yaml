@@ -13,3 +13,10 @@
     state: present
     update_cache: true
   become: true
+
+- name: Add ssm-user to the docker group.
+  ansible.builtin.user:
+    name: ssm-user
+    groups: docker
+    append: true
+  become: true

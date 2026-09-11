@@ -3,4 +3,5 @@ ansible_aws_ssm_region: "{{ aws_region }}"
 ansible_aws_ssm_profile: default
 aws_region: eu-central-1
 ansible_aws_ssm_bucket_name: global-ansible-ssm-staging-bucket
-system_timezone: UTC
+system_timezone: "Etc/UTC"
+ansible_aws_ssm_timeout: 200
