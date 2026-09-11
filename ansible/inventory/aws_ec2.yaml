@@ -12,4 +12,6 @@ hostnames: instance-id
 keyed_groups:
   - key: ec2_tags.Project
     prefix: project
-  # - key: ec2_tags.Name
+
+compose:
+  domain: tags.DomainName
