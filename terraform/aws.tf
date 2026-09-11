@@ -12,6 +12,7 @@ provider "aws" {
 
 resource "aws_vpc" "vpc" {
   cidr_block = "10.0.0.0/16"
+
   tags = {
     Name = "static-site-vpc"
   }
@@ -19,6 +20,7 @@ resource "aws_vpc" "vpc" {
 
 resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.vpc.id
+
   tags = {
     Name = "static-site-igw"
   }
@@ -29,19 +31,11 @@ resource "aws_subnet" "public_subnet" {
   cidr_block              = "10.0.1.0/24"
   availability_zone       = "${var.region}a"
   map_public_ip_on_launch = true
+
   tags = {
     Name = "static-site-public-subnet1a"
   }
 }
-
-# resource "aws_subnet" "private_subnet" {
-#   vpc_id            = aws_vpc.vpc.id
-#   cidr_block        = "10.0.2.0/24"
-#   availability_zone = "${var.region}a"
-#   tags = {
-#     Name = "static-site-private-subnet1a"
-#   }
-# }
 
 resource "aws_route_table" "public_route_table" {
   vpc_id = aws_vpc.vpc.id
@@ -49,6 +43,7 @@ resource "aws_route_table" "public_route_table" {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.gw.id
   }
+
   tags = {
     Name = "static-site-route-table"
   }
@@ -83,7 +78,6 @@ resource "aws_iam_role_policy_attachment" "ec2_role_policy" {
 
 resource "aws_iam_instance_profile" "ec2_instance_profile" {
   name = "EC2_SSM_Instance_Profile"
-
   role = aws_iam_role.ec2_role.name
 }
 
@@ -110,10 +104,6 @@ resource "aws_security_group" "instance_security_group" {
 
   tags = {
     Name = "static-site-instance-sg"
-  }
-
-  lifecycle {
-    create_before_destroy = true
   }
 }
 
