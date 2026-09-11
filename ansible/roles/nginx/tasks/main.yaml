@@ -23,14 +23,6 @@
     group: ssm-user
     mode: '0755'
 
-- name: (temp) deploy html
-  ansible.builtin.template:
-    src: index.html.j2
-    dest: /srv/portfolio/content/index.html
-    owner: ssm-user
-    group: ssm-user
-    mode: '0644'
-
 - name: Run docker compose up
   community.docker.docker_compose_v2:
     project_src: /srv/portfolio
