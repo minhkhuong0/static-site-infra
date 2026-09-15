@@ -143,12 +143,12 @@ resource "aws_instance" "app_server" {
 }
 
 resource "aws_s3_bucket" "staging" {
-  bucket = "static-site-staging-s3"
+  bucket        = "static-site-staging-s3"
+  force_destroy = true
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "one_day" {
   bucket = aws_s3_bucket.staging.bucket
-
   rule {
     id = "expiration"
     expiration {
