@@ -1,6 +1,6 @@
 - name: Ensure deployment dir exists
   ansible.builtin.file:
-    path: /srv/portfolio
+    path: /srv/static-site
     state: directory
     owner: ssm-user
     group: ssm-user
@@ -10,14 +10,14 @@
 - name: Deploy docker-compose.yaml
   ansible.builtin.template:
     src: docker-compose.yaml.j2
-    dest: /srv/portfolio/docker-compose.yaml
+    dest: /srv/static-site/docker-compose.yaml
     owner: ssm-user
     group: ssm-user
     mode: '0644'
 
 - name: Ensure content dir exists
   ansible.builtin.file:
-    path: /srv/portfolio/content
+    path: /srv/static-site/content
     state: directory
     owner: ssm-user
     group: ssm-user
@@ -25,7 +25,7 @@
 
 - name: Run docker compose up
   community.docker.docker_compose_v2:
-    project_src: /srv/portfolio
+    project_src: /srv/static-site
     state: present
   register: nginx_output
 
