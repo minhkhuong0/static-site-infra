@@ -141,3 +141,19 @@ resource "aws_instance" "app_server" {
     DomainName = "www.${var.domain}"
   }
 }
+
+resource "aws_s3_bucket" "staging" {
+  bucket = "static-site-staging-s3"
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "one_day" {
+  bucket = aws_s3_bucket.staging.bucket
+
+  rule {
+    id = "expiration"
+    expiration {
+      days = 1
+    }
+    status = "Enabled"
+  }
+}
