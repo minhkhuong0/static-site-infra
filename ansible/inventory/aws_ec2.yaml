@@ -1,4 +1,6 @@
 plugin: amazon.aws.aws_ec2
+use_deprecated_tags: false
+
 regions:
   - eu-central-1
 
@@ -14,4 +16,4 @@ keyed_groups:
     prefix: project
 
 compose:
-  domain: tags.DomainName
+  domain: ec2_tags.DomainName
